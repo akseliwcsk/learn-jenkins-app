@@ -19,7 +19,14 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
+        stage('Test') 
+        agent {
+                docker {
+                    image 'node:19-bullseye'
+                    reuseNode true
+                }
+            }
+        {
             steps {
                 sh '''
                 echo "Test stage"
