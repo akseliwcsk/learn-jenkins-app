@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'jenkins-slave' // Ensure this label matches your Jenkins slave node label
+        label 'jenkins_slave' // Ensure this label matches your Jenkins slave node label
     }
     stages {
         stage('Build') {
