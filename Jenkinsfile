@@ -1,15 +1,9 @@
 pipeline {
     agent {
-        label 'jenkins-slave'
+        label 'jenkins-slave' // Ensure this label matches your Jenkins slave node label
     }
     stages {
         stage('Build') {
-            agent {
-                docker {
-                    image 'node:19-bullseye'
-                    reuseNode true
-                }
-            }
             steps {
                 sh '''
                     ls -la
@@ -22,29 +16,16 @@ pipeline {
             }
         }
         stage('Test') {
-        agent {
-                docker {
-                    image 'node:19-bullseye'
-                    reuseNode true
-                }
-            }
-        steps {
+            steps {
                 sh '''
-                echo "Test stage"
-                stat build/index.html
-                npm test a
+                    echo "Test stage"
+                    stat build/index.html
+                    npm test a
                 '''
             }
         }
-
-         stage('E2E') {
-        agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright:v1.47.0-noble'
-                    reuseNode true
-                }
-            }
-        steps {
+        stage('E2E') {
+            steps {
                 sh '''
                     npm install serve
                     node_modules/.bin/serve -s build &
@@ -53,11 +34,10 @@ pipeline {
                 '''
             }
         }
-    
     }
-        post {
-            always {
-                junit "jest-results/junit.xml"
-            }
+    post {
+        always {
+            junit "jest-results/junit.xml"
         }
+    }
 }
